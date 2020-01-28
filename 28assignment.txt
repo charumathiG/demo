@@ -1,0 +1,180 @@
+
+PROGRAM 1
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DivisibleBySevenApplication
+{
+    class Program
+    {
+        int number;
+
+        public int Number { get => number; set => number = value; }
+
+        public void DivisibleBySeven()
+        {
+
+            List<int> inumbers = new List<int>();
+            Console.WriteLine("Enter 10 numbers to find which are divisible by 7: ");
+            for (int i = 0; i < 10; i++)
+            {
+                number= int.Parse(Console.ReadLine());
+                inumbers.Add(number);
+            }
+            Console.WriteLine("the numbers divisible by 7 are: ");
+            for (int i = 0; i < 10; i++)
+            {
+                if (inumbers[i] % 7 == 0)
+                {
+
+                    Console.WriteLine(inumbers[i]);
+                }
+            }
+
+
+        }
+        static void Main(string[] args)
+        {
+            Program program = new Program();
+            program.DivisibleBySeven();
+            Console.ReadKey();
+        }
+    }
+}
+------------------------------------------------------------------------------------------------------------------------------
+PROGRAM 2
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PrimeNumbers
+{
+    class Program
+    {
+
+    int minvalue, maxvalue, i, j, flag;
+
+    public int Minvalue { get => minvalue; set => minvalue = value; }
+    public int Maxvalue { get => maxvalue; set => maxvalue = value; }
+
+    public void GetMinMaxValues()
+    {
+            List<int> flag = new List<int>();
+        Console.WriteLine("Enter the Minimum Value:");
+        minvalue = int.Parse(Console.ReadLine());
+            flag.Add(minvalue);
+        Console.WriteLine("Enter the Maximum Value:");
+        maxvalue = int.Parse(Console.ReadLine());
+            flag.Add(maxvalue);
+    }
+    public void FindPrimeValues()
+    {
+        Console.WriteLine("the prime numbers between {0} and {1} are : ", minvalue, maxvalue);
+        for (i = minvalue; i <= maxvalue; i++)
+        {
+            if (i == 1 || i == 0)
+                continue;
+            flag = 1;
+            for (j = 2; j <= i / 2; ++j)
+            {
+                if (i % j == 0)
+                {
+                    flag = 0;
+                    break;
+                }
+            }
+            if (flag == 1)
+                Console.WriteLine(i);
+        }
+    }
+    public void CheckMinMaxValues()
+    {
+        if (minvalue < maxvalue)
+        {
+            FindPrimeValues();
+        }
+        else if (minvalue > maxvalue)
+        {
+            Console.WriteLine("Invalid entry");
+        }
+        else if (minvalue == maxvalue)
+        {
+            Console.WriteLine("No values between them ");
+        }
+
+    }
+
+    static void Main(string[] args)
+    {
+        Program program = new Program();
+        program.GetMinMaxValues();
+        program.CheckMinMaxValues();
+        Console.ReadKey();
+    }
+}
+}
+---------------------------------------------------------------------------------------------------------------------
+PROGRAM 7
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+
+namespace ExamplePrograms
+{
+    class Program
+    {
+        void CardValidity()
+        {
+            int cardnumber;
+            int sum = 0;
+            List<int> numbers = new List<int>();
+            Console.WriteLine("please enter your card number");
+            for (int i = 0; i < 16; i++)
+            {
+                cardnumber = Convert.ToInt32(Console.ReadLine());
+                numbers.Add(cardnumber);
+            }
+            Console.WriteLine("Reverse");
+            numbers.Reverse();
+            for (int i = 0; i < numbers.Count; i++)
+            {
+                Console.WriteLine(numbers[i]);
+            }
+                for (int i = 0; i < numbers.Count; i++)
+                {
+                    if (i % 2 != 0)
+                    {
+                        numbers[i] = numbers[i] * 2;
+
+                    }
+                    if (numbers[i] > 9)
+                    {
+                        numbers[i] = numbers[i] - 9;
+                    }
+                    sum += numbers[i];
+                }
+                Console.WriteLine("sum is" + sum);
+            }
+        
+
+
+            static void Main(string[] args)
+            {
+                Program program = new Program();
+                program.CardValidity();
+                Console.ReadLine();
+            }
+        }
+    }
+
+----------------------------------------------------------------------------------------------------------------------------

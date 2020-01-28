@@ -1,0 +1,331 @@
+MOVIERENTAL.CS
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using MovieRentalModelLibrary;
+
+namespace MovieRentalProject
+{
+    class MovieRental
+    {
+        List<Movie> movies;
+        Dictionary<int, Movie> movie;
+        public MovieRental()
+        {
+            movies = new List<Movie>();
+        }
+        bool CheckIdDuplication(int id)
+        {
+            bool duplicate = false;
+            for (int i = 0; i < movies.Count; i++)
+            {
+                if (movies[i].Id == id)
+                {
+                    duplicate = true;
+                    break;
+                }
+
+            }
+            return duplicate;
+        }
+        /// <summary>create
+        public void AddMovies()
+        {
+            string choice = "no";
+            do
+            {
+                Console.WriteLine("Do you want to enter the movie details??");
+                choice = Console.ReadLine().ToLower();
+                if (choice == "yes")
+                {
+                    Movie movie = new Movie();
+                    movie.TakeMovieDetailsFromUser();
+                    if (CheckIdDuplication(movie.Id) == false)
+                        movies.Add(movie);
+                    else
+                        Console.WriteLine("Movi Id already present");
+                }
+            } while (choice == "yes");
+        }
+        /// <summary>Reada All
+        public void PrintAllMovies()
+        {
+            if (movies.Count == 0)
+            {
+                Console.WriteLine("User user no movies are present. Please add movies before");
+                return;
+            }
+            movies.Sort();
+            foreach (Movie movie in movies)
+            {
+                Console.WriteLine(movie);
+            }
+            Console.WriteLine("------------------------------------------------------------");
+        }
+        /// Gets the index of a given movie Id
+        public int GetMovieIndexUsingId(int id)
+        {
+            int idx = -1;
+            for (int i = 0; i < movies.Count; i++)
+            {
+                if (movies[i].Id == id)
+                {
+                    idx = i;
+                    break;
+                }
+
+            }
+            return idx;
+        }
+        /// Takes the id from user and returns the same
+        public int GetId()
+        {
+            int id = 0;
+            while (!int.TryParse(Console.ReadLine(), out id))
+                Console.WriteLine("Invalid id. Please enter the ID again!!!");
+            return id;
+        }
+        /// <summary>Read one
+        public void PrintMovie()
+        {
+            Console.WriteLine("Please enter the movie ID for printing");
+            int id = GetId();
+            int myIndex = GetMovieIndexUsingId(id);
+            if (id == -1)
+                Console.WriteLine("No such a movie with id:" + id);
+            else
+            {
+                Console.WriteLine("The Movie details");
+                Console.WriteLine(movies[myIndex]);
+            }
+
+        }
+        public void UpdateMovie()
+        {
+            Console.WriteLine("Please enter the Movie Id for updation");
+            int id = GetId();
+            int myIndex = GetMovieIndexUsingId(id);
+            if (myIndex == -1)
+                Console.WriteLine("No such more. No Updation Possible");
+            else
+            {
+                Console.WriteLine("The movie you wanted to update");
+                Console.WriteLine(movies[myIndex]);
+
+                string name, language;
+                double duration;
+                string propertyChoice = "";
+                Console.WriteLine("What do you want to Update?");
+                Console.WriteLine("1.Name");
+                Console.WriteLine("2.Language");
+                Console.WriteLine("3.Duration");
+                propertyChoice = Console.ReadLine();
+                switch (propertyChoice)
+                {
+                    case "1":
+                        Console.WriteLine("please enter the Movie name");
+                        name = Console.ReadLine();
+                        movies[myIndex].Name = name;
+                        break;
+                    case "2":
+                        Console.WriteLine("Please enter the Movie Language");
+                        language = Console.ReadLine();
+                        movies[myIndex].Language = language;
+                        break;
+                    case "3":
+
+
+                        Console.WriteLine("please enter the movie duration");
+                        while (!double.TryParse(Console.ReadLine(), out duration))
+                            Console.WriteLine("invalid value.Please enter the duration");
+                        movies[myIndex].Duration = duration;
+                        break;
+                    default:
+                        Console.WriteLine("invalid choice");
+                        break;
+                }
+                Console.WriteLine("The updated movie details are:");
+                Console.WriteLine(movies[myIndex]);
+            }
+        }
+        public void DeleteMovie()
+        {
+            Console.WriteLine("Please enter the Movie Id for updation");
+            int id = GetId();
+            int myIndex = GetMovieIndexUsingId(id);
+            if (myIndex == -1)
+                Console.WriteLine("No such more. No Updation Possible");
+            else
+            {
+                Console.WriteLine("The movie you wanted to update");
+                Console.WriteLine(movies[myIndex]);
+                Console.WriteLine("Do you want to delete the above movie??");
+                string deleteConfirmation = Console.ReadLine().ToLower();
+                if (deleteConfirmation == "yes")
+                {
+                    Movie movie = new Movie();
+                    movie.Id = id;
+                    movies.Remove(movie);
+                    Console.WriteLine("Movie deleted");
+                }
+            }
+        }
+    }
+}
+    
+PROGRAM.CS
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MovieRentalProject
+{
+    class Program
+    {
+        MovieRental rental;
+        Program()
+        {
+            rental = new MovieRental();
+        }
+        void PrintMenu()
+        {
+            string choice = "";
+            rental = new MovieRental();
+            Console.WriteLine("Add movies");
+            rental.AddMovies();
+            do
+            {
+                Console.WriteLine("Enter your choice of action");
+                Console.WriteLine("1.Add Movies");
+                Console.WriteLine("2.Print A Movies");
+                Console.WriteLine("3.Print All Movies");
+                Console.WriteLine("4.Update Movies");
+                Console.WriteLine("5.Delete Movies");
+                Console.WriteLine("6.Exit");
+                choice = Console.ReadLine();
+                switch (choice)
+                {
+                    case "1":
+                        rental.AddMovies();
+                        break;
+                    case "2":
+                        rental.PrintMovie();
+                        break;
+                    case "3":
+                        rental.PrintAllMovies();
+                        break;
+                    case "4":
+                        rental.UpdateMovie();
+                        break;
+                    case "5":
+                        rental.DeleteMovie();
+                        break;
+                    case "6":
+                        Console.WriteLine("Existing....");
+                        break;
+                    default:
+                        Console.WriteLine("Invalid Choice.Try again");
+                        break;
+                }
+            } while (choice != "6");
+        }
+        static void Main(string[]args)
+        {
+            Program program = new Program();
+            program.PrintMenu();
+            Console.ReadLine();
+        }
+    }
+}
+#################################################################################################
+MOVIE.CS
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MovieRentalModelLibrary
+{
+    public class Movie :IComparable<Movie>
+    {
+        int id;
+        string name, language;
+        double duration;
+
+        public int Id { get => id; set => id = value; }
+        public string Name { get => name; set => name = value; }
+        public string Language { get => language; set => language = value; }
+        public double Duration { get => duration; set => duration = value; }
+        public Movie() { }
+        public Movie(int id, string name, string language, double duration)
+
+        {
+            this.id = id;
+            this.name = name;
+            this.language = language;
+            this.duration = duration;
+
+        }
+        public override string ToString()
+        {
+            return "Movie ID:" + id +
+                "\nMovie Name:" + name +
+                "\nMovie Language:" + language +
+                "\nMovie Duration:" + duration;
+
+        }
+        public void TakeMovieDetailsFromUser()
+        {
+            Console.WriteLine("Please enter the movie id");
+            while (!int.TryParse(Console.ReadLine(), out id))
+                Console.WriteLine("invalid id. please enter the id again");
+            Console.WriteLine("Please enter the movie name");
+            name = Console.ReadLine();
+            Console.WriteLine("please enter the movie language");
+            language = Console.ReadLine();
+            Console.WriteLine("please enter the movie duration");
+            while (!double.TryParse(Console.ReadLine(), out duration))
+                Console.WriteLine("invalid value.Please enter the duration");
+        }
+    
+    public override bool Equals(object obj)
+    {
+       
+            Movie movie = (Movie)obj;
+            if (this.Id == movie.Id)
+                return true;
+            else
+                return false;
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public int CompareTo(Movie other)
+        {
+            return this.Id.CompareTo(other.Id);
+            
+        }
+    }
+    public class MovieLengthSort : IComparer<Movie>
+    {
+        public int Compare(Movie x, Movie y)
+        {
+            return x.Duration.CompareTo(y.Duration);
+        }
+    }
+    public class MovieNameSort:IComparer<Movie>
+    {
+        public int Compare(Movie x,Movie y)
+        {
+            return x.Name.CompareTo(y.Name);
+        }
+    }
+}
+#######################################################################################################################       
